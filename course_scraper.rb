@@ -1,35 +1,63 @@
 require 'open-uri'
 require 'nokogiri'
 require 'openssl'
+require './course'
+require './section'
 
 class CourseScraper
-    def self.run
-        doc = Nokogiri::HTML(open("https://aits.encs.concordia.ca/oldsite/resources/schedules/courses/details/?ys=20161&d=05&c=COMP352", ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE))
-        course = {}
-         course['Name'] = doc.css('#maincontent div h1')[0].content
-         course['Lec'] = []
-         course['Lab'] = []
-         course['Tut'] = []
-        data = doc.css('table')[1].css('tbody tr td')
-        (data.size / 9).times do |i|
-            sectionData = data[9*i..9*i+7]
-            course[getData(sectionData[0])] << extractSection(sectionData)
-        end
+  def self.extract(url)
+    doc = Nokogiri::HTML(
+      open(
+        url,
+        ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE
+      )
+    )
+    course = Course.new(name: course_name(doc))
+    data_table = doc.at('table:contains("Instructor")')
+    if data_table.nil?
+      puts 'No data table for course: ' + url
+      return
     end
+    data = data_table.css('tbody tr td')
+    course_data course, data
+    course
+  end
 
-    def self.extractSection(sectionData)
-        info = {}
-        info['section'] = getData(sectionData[1]) + getData(sectionData[2])
-        info['days'] = getData(sectionData[4])
-        info['start'] = Time.new(2016,1,1,getData(sectionData[5]).split(':')[0],getData(sectionData[5]).split(':')[1])
-        info['end'] = Time.new(2016,1,1,getData(sectionData[6]).split(':')[0],getData(sectionData[6]).split(':')[1])
-        info['room'] = getData(sectionData[7])
-        info
-    end
+  def self.course_name(doc)
+    doc.css('#maincontent div h1')[0].content
+  end
 
-    def self.getData(nokoObject)
-        nokoObject.content.gsub(/[^0-9A-Za-z:]/, '')
+  def self.course_data(course, data)
+    (data.size / 9).times do |i|
+      section_data = data[(9 * i)..(9 * i + 7)]
+      section = extract_section(section_data)
+      section.sectionType = get_data(section_data[0])
+      case section.sectionType
+      when 'Tut'
+        course.tutorials << section
+      when 'Lab'
+        course.laboratories << section
+      when 'Lec'
+        course.lectures << section
+      end
     end
+  end
+
+  def self.extract_section(section_data)
+    Section.new(
+      section: get_data(section_data[1]) + get_data(section_data[2]),
+      days: get_data(section_data[4]),
+      time_start: extract_time(get_data(section_data[5])),
+      time_end: extract_time(get_data(section_data[6])),
+      room: get_data(section_data[7])
+    )
+  end
+
+  def self.extract_time(time_string)
+    Time.new 2016, 1, 1, time_string.split(':')[0], time_string.split(':')[1]
+  end
+
+  def self.get_data(noko_object)
+    noko_object.content.gsub(/[^0-9A-Za-z:]/, '')
+  end
 end
-
-CourseScraper.run
