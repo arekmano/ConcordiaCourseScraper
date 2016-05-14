@@ -1,5 +1,5 @@
 require 'rspec'
-require_relative '../scrapers/course_scraper'
+require_relative '../lib/scrapers/course_scraper'
 require 'open-uri'
 require 'nokogiri'
 
