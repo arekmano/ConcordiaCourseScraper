@@ -1,5 +1,5 @@
 class Section
-  attr_accessor :section, :days, :time_start, :time_end, :room, :sectionType
+  attr_accessor :section, :days, :time_start, :time_end, :room, :section_type
   def initialize(options = {})
     @section = options.fetch(:section, nil)
     @days = options.fetch(:days, nil)

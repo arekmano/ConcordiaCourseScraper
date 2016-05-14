@@ -1,26 +1,27 @@
 require 'open-uri'
 require 'nokogiri'
 require 'openssl'
-require './course_scraper'
-require './semester'
+require_relative './course_scraper'
+require_relative './nokogiri_scraper'
+require_relative '../models/semester'
 
-class SemesterScraper
-  def self.extract(url)
-    doc = Nokogiri::HTML(
-      open(
-        url,
-        ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE
-      )
-    )
+
+class SemesterScraper < NokogiriScraper
+  def self.extract(uri)
+    doc = Nokogiri::HTML(open(uri))
     semester = Semester.new(
       semester: semester(doc),
       year: year(doc)
     )
     courses = doc.css('table tbody tr th a')
     courses.each do |course|
-      semester.courses << CourseScraper.extract('https://aits.encs.concordia.ca/oldsite/resources/schedules/courses/' + course.attr('href'))
+      course_uri =  "#{uri.scheme}://#{uri.host + uri.path + course.attr('href')}"
+      begin
+        semester.courses << CourseScraper.extract(course_uri)
+      rescue
+      end
     end
-    puts "Semester: #{semester.year} #{semester.semester} done!"
+    puts "Semester Scraped: #{semester.year} #{semester.semester}."
     semester
   end
 

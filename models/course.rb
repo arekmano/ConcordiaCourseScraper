@@ -1,8 +1,8 @@
 class Course
-  attr_accessor :name, :course_code, :lectures, :laboratories, :tutorials
+  attr_accessor :name, :code, :lectures, :laboratories, :tutorials
   def initialize(options = {})
     @name = options.fetch(:name, nil)
-    @course_code = options.fetch(:course_code, nil)
+    @code = options.fetch(:code, nil)
     @lectures = options.fetch(:lectures, [])
     @laboratories = options.fetch(:laboratories, [])
     @tutorials = options.fetch(:tutorials, [])
