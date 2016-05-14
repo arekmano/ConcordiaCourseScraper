@@ -7,8 +7,6 @@ require_relative './section_scraper'
 
 
 class CourseScraper < NokogiriScraper
-  attr_accessor :uri
-
   def self.extract(uri)
     doc = Nokogiri::HTML(open(uri))
     course = Course.new(name: course_name(doc))
@@ -37,13 +35,5 @@ class CourseScraper < NokogiriScraper
         course.lectures << section
       end
     end
-  end
-
-  def extract
-    CourseScraper.extract(@uri)
-  end
-
-  def initialize(uri)
-    @uri = uri
   end
 end

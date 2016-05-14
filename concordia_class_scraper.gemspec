@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name        = 'ConcordiaClassScraper'
-  spec.version     = '0.0.1'
+  spec.version     = '0.0.2'
   spec.date        = '2016-05-14'
   spec.summary     = 'Class scraper made specifically for Concordia University'
   spec.description = 'A simple hello world gem'

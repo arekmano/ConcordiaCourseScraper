@@ -4,7 +4,6 @@ require 'openssl'
 require_relative './semester_scraper'
 
 class ConcordiaScraper
-  attr_accessor :uri
   DEFAULT_SITE = URI.parse('https://aits.encs.concordia.ca/oldsite/resources/schedules/courses/')
 
   def self.extract(uri = DEFAULT_SITE)
@@ -17,13 +16,5 @@ class ConcordiaScraper
       semester_data << SemesterScraper.extract(semester_uri)
     end
     puts semester_data
-  end
-
-  def extract
-    ConcordiaScraper.extract(@uri)
-  end
-
-  def initialize(uri = DEFAULT_SITE)
-    @uri = uri
   end
 end
