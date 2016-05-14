@@ -7,6 +7,8 @@ require_relative '../models/semester'
 
 
 class SemesterScraper < NokogiriScraper
+  attr_accessor :uri
+
   def self.extract(uri)
     doc = Nokogiri::HTML(open(uri))
     semester = Semester.new(
@@ -31,5 +33,13 @@ class SemesterScraper < NokogiriScraper
 
   def self.semester(doc)
     doc.css('#maincontent > div.insidecontent > h1')[0].content.gsub(/[^A-Za-z ]/, '').split(' ')[0]
+  end
+
+  def extract
+    SemesterScraper.extract(@uri)
+  end
+
+  def initialize(uri)
+    @uri = uri
   end
 end

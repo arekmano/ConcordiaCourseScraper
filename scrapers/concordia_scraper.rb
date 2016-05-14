@@ -4,8 +4,9 @@ require 'openssl'
 require_relative './semester_scraper'
 
 class ConcordiaScraper
-  attr_accessor :uri, :semester_scraper
+  attr_accessor :uri
   DEFAULT_SITE = URI.parse('https://aits.encs.concordia.ca/oldsite/resources/schedules/courses/')
+
   def self.extract(uri = DEFAULT_SITE)
     doc = Nokogiri::HTML(open(uri))
     semester_data = []

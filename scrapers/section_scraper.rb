@@ -1,6 +1,7 @@
 require_relative '../models/section'
 
 class SectionScraper < NokogiriScraper
+
   def self.extract(section_data)
     Section.new(
       section_type: get_data(section_data[0]),
