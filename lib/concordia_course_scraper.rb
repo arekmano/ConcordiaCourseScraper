@@ -2,7 +2,7 @@ require_relative './scrapers/concordia_scraper'
 require_relative './scrapers/course_scraper'
 require_relative './scrapers/semester_scraper'
 
-class ConcordiaClassScraper
+class ConcordiaCourseScraper
   attr_accessor :uri
   DEFAULT_SITE = URI.parse('https://aits.encs.concordia.ca/oldsite/resources/schedules/courses/')
   def self.extract_all(uri = DEFAULT_SITE)
