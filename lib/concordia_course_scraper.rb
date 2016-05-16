@@ -1,36 +1,45 @@
 require_relative './scrapers/concordia_scraper'
 require_relative './scrapers/course_scraper'
 require_relative './scrapers/semester_scraper'
+require_relative './database_populators/csv_populator'
 
 class ConcordiaCourseScraper
-  attr_accessor :uri
+  attr_accessor :uri, :course_scraper, :semester_scraper, :section_scraper, :concordia_scraper, :database_populator
   DEFAULT_SITE = URI.parse('https://aits.encs.concordia.ca/oldsite/resources/schedules/courses/')
-  def self.extract_all(uri = DEFAULT_SITE)
-    ConcordiaScraper.extract(uri)
+
+  def initialize(options = { uri: DEFAULT_SITE })
+    @uri = if options[:uri].class == String
+             URI.parse(options[:uri])
+           else
+             options[:uri]
+           end
+    @database_populator = options.fetch(:database_populator, CsvPopulator.new)
+    @section_scraper = options.fetch(:section_scraper, SectionScraper.new)
+    @course_scraper = options.fetch(:course_scraper, CourseScraper.new(section_scraper: @section_scraper))
+    @semester_scraper = options.fetch(:semester_scraper, SemesterScraper.new(course_scraper: @course_scraper))
+    @concordia_scraper = options.fetch(:concordia_scraper, ConcordiaScraper.new(semester_scraper: @semester_scraper))
   end
 
-  def self.extract_course(uri)
-    ClassScraper.extract(uri)
+  def extract_all(options = {})
+    @uri = options.fetch(:uri, @uri)
+    @cache = @concordia_scraper.extract(@uri) if @cache.nil?
+    @cache
   end
 
-  def self.extract_semester(uri)
-    SemesterScraper.extract(uri)
+  def courses
+    @course_scraper.courses
   end
 
-  def initialize(uri = DEFAULT_SITE)
-    uri = URI.parse(uri) if uri.class == String
-    @uri = uri
+  def semesters
+    @semester_scraper.semesters
   end
 
-  def extract_all(uri = @uri)
-    ConcordiaScraper.extract(uri)
+  def sections
+    @section_scraper.sections
   end
 
-  def extract_course(uri = @uri)
-    ClassScraper.extract(uri)
-  end
-
-  def extract_semester(uri = @uri)
-    SemesterScraper.extract(uri)
+  def save
+    extract_all
+    database_populator.save(courses, semesters, sections)
   end
 end
