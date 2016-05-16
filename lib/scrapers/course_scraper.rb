@@ -5,7 +5,6 @@ require_relative '../models/course'
 require_relative './nokogiri_scraper'
 require_relative './section_scraper'
 
-
 class CourseScraper < NokogiriScraper
   def self.extract(uri)
     doc = Nokogiri::HTML(open(uri))

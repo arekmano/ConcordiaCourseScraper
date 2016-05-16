@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
-  spec.name        = 'Concordia Course Scraper'
-  spec.version     = '0.0.3'
+  spec.name        = 'concordia_course_scraper'
+  spec.version     = '0.0.5'
   spec.date        = '2016-05-14'
   spec.summary     = 'Class scraper made specifically for Concordia University'
   spec.description = 'A simple hello world gem'
@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.homepage    = 'https://github.com/arekmano/ConcordiaCourseScraper'
   spec.license     = 'MIT'
   spec.files       = Dir[
-    'lib/concordia_class_scraper.rb',
+    'lib/concordia_course_scraper.rb',
     'lib/models/*.rb',
     'lib/scrapers/*.rb'
   ]

@@ -15,6 +15,6 @@ class ConcordiaScraper
       semester_uri = URI.parse(semester_uri_string)
       semester_data << SemesterScraper.extract(semester_uri)
     end
-    puts semester_data
+    semester_data
   end
 end
