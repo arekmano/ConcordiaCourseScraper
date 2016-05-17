@@ -1,4 +1,4 @@
-# ConcordiaCourseScraper
+# Concordia Course Scraper
 A simple ruby gem web scraper for extracting course information from Concordia University's web pages.
 
 ## Features
