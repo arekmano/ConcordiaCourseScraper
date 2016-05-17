@@ -30,3 +30,6 @@ Save extracted data to CSV files:
 scraper = ConcordiaCourseScraper.new
 scraper.save
 ```
+
+## Populating a MySQL database
+The included 'concordia_course_schema.sql' file will set up the 'concordiacourses' database, able to accomodate the information stored on the CSV.
