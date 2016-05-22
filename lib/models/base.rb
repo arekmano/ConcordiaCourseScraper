@@ -1,4 +1,5 @@
 require 'securerandom'
+
 class Base
   attr_accessor :id
   def initialize(_ = {})

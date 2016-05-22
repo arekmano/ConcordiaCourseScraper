@@ -4,7 +4,7 @@ require_relative './nokogiri_scraper'
 require_relative './section_scraper'
 
 class CourseScraper < NokogiriScraper
-  attr_reader :courses, :section_scraper
+  attr_accessor :courses, :section_scraper
 
   def initialize(options = {})
     @section_scraper = options.fetch(:section_scraper)
