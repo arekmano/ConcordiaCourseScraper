@@ -18,7 +18,7 @@ Add the following to the ruby script:
 require "concordia_course_scraper"
 ```
 
-Extract information from the ENCS concordia website:
+Extract data to ruby objects:
 ```ruby
 scraper = ConcordiaCourseScraper.new
 data = scraper.extract_all
