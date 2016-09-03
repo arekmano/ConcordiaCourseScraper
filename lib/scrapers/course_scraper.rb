@@ -14,7 +14,8 @@ class CourseScraper < NokogiriScraper
   def extract(uri, semester)
     doc = load_uri uri
     course = Course.new(
-      name: course_name(doc),
+      name: course_name(doc).split(' - ')[1],
+      code: course_name(doc).split(' - ')[0],
       semester: semester
     )
     data_table = doc.at('table:contains("Instructor")')

@@ -6,10 +6,7 @@ class Course < Base
     super
     @name = options.fetch(:name, nil)
     @code = options.fetch(:code, nil)
-    if @code.nil? && !options.fetch(:name, '').match(/\w{4}\d{3,4}/).nil?
-      @code = options.fetch(:name, '').match(/\w{4}\d{3,4}/)[0]
-    end
-    @name.sub!((@code + ' - '), '') unless @code.nil?
+    @name = options.fetch(:name, nil)
     @lectures = options.fetch(:lectures, [])
     @laboratories = options.fetch(:laboratories, [])
     @tutorials = options.fetch(:tutorials, [])
@@ -18,5 +15,18 @@ class Course < Base
 
   def sections
     @lectures + @laboratories + @tutorials
+  end
+
+  def add_section(section)
+    case section.section_type.upcase
+    when 'LEC'
+      @lectures << section
+    when 'LAB'
+      @laboratories << section
+    when 'TUT'
+      @tutorials << section
+    else
+      raise 'Invalid Section Type'
+    end
   end
 end
