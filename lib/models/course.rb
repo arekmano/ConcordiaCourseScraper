@@ -28,5 +28,6 @@ class Course < Base
     else
       raise 'Invalid Section Type'
     end
+    section.course = self
   end
 end
