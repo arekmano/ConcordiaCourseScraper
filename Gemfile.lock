@@ -35,7 +35,7 @@ PLATFORMS
 
 DEPENDENCIES
   codeclimate-test-reporter
-  nokogiri
+  nokogiri (= 1.6.8)
   rspec
   simplecov
 
