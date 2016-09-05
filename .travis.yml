@@ -1,0 +1,8 @@
+language: ruby
+rvm:
+  - 2.2
+script: rspec spec
+cache: bundler
+addons:
+    code_climate:
+        repo_token: $CODE_CLIMATE
