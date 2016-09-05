@@ -1,6 +1,5 @@
 require 'rspec'
 require 'open-uri'
-require 'nokogiri'
 
 require_relative './spec_helper'
 require_relative '../lib/scrapers/course_scraper'
