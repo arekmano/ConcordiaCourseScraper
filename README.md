@@ -1,3 +1,7 @@
+[![Code Climate](https://codeclimate.com/github/arekmano/ConcordiaCourseScraper/badges/gpa.svg)](https://codeclimate.com/github/arekmano/ConcordiaCourseScraper)
+[![Test Coverage](https://codeclimate.com/github/arekmano/ConcordiaCourseScraper/badges/coverage.svg)](https://codeclimate.com/github/arekmano/ConcordiaCourseScraper/coverage)
+
+
 # Concordia Course Scraper
 A simple ruby gem web scraper for extracting course information from Concordia University's web pages.
 
