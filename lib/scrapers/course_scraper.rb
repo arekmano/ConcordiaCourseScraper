@@ -1,29 +1,29 @@
 require 'nokogiri'
+
 require_relative '../models/course'
+require_relative '../models/course_list'
 require_relative './nokogiri_scraper'
 require_relative './section_scraper'
 
 class CourseScraper < NokogiriScraper
-  attr_accessor :courses, :section_scraper
+  attr_accessor :course_list, :section_scraper
 
   def initialize(options = {})
-    @section_scraper = options.fetch(:section_scraper)
-    @courses = []
+    @section_scraper = options.fetch(:section_scraper, SectionScraper.new)
+    @course_list = options.fetch(:course_list, CourseList.new)
   end
 
   def extract(uri, semester)
     doc = load_uri uri
-    course = Course.new(
-      name: course_name(doc).split(' - ')[1],
-      code: course_name(doc).split(' - ')[0],
-      semester: semester
+    course = @course_list.get(
+      course_name(doc).split(' - ')[0],
+      course_name(doc).split(' - ')[1]
     )
     data_table = doc.at('table:contains("Instructor")')
     raise 'No data table for course: ' + uri if data_table.nil?
     data = data_table.css('tbody tr td')
-    course_data course, data
+    course_data course, semester, data
     puts "Course Scraped: #{course.name}"
-    @courses << course
     course
   end
 
@@ -31,18 +31,10 @@ class CourseScraper < NokogiriScraper
     doc.css('#maincontent div h1')[0].content
   end
 
-  def course_data(course, data)
+  def course_data(course, semester, data)
     (data.size / 9).times do |i|
       section_data = data[(9 * i)..(9 * i + 7)]
-      section = @section_scraper.extract(section_data, course)
-      case section.section_type
-      when 'Tut'
-        course.tutorials << section
-      when 'Lab'
-        course.laboratories << section
-      when 'Lec'
-        course.lectures << section
-      end
+      section = @section_scraper.extract(section_data, course, semester)
     end
   end
 end

@@ -27,7 +27,7 @@ class ConcordiaCourseScraper
   end
 
   def courses
-    @course_scraper.courses
+    @course_scraper.course_list.courses
   end
 
   def semesters

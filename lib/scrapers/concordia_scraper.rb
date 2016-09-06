@@ -7,7 +7,7 @@ class ConcordiaScraper < NokogiriScraper
   DEFAULT_SITE = URI.parse('https://aits.encs.concordia.ca/oldsite/resources/schedules/courses/')
 
   def initialize(options = {})
-    @semester_scraper = options.fetch(:semester_scraper)
+    @semester_scraper = options.fetch(:semester_scraper, SemesterScraper.new)
   end
 
   def extract(uri = DEFAULT_SITE)

@@ -8,7 +8,7 @@ class SemesterScraper < NokogiriScraper
 
   def initialize(options = {})
     @semesters = []
-    @course_scraper = options.fetch(:course_scraper)
+    @course_scraper = options.fetch(:course_scraper, CourseScraper.new)
   end
 
   def extract(uri)
@@ -21,8 +21,9 @@ class SemesterScraper < NokogiriScraper
     courses.each do |course|
       course_uri =  "#{uri.scheme}://#{uri.host + uri.path + course.attr('href')}"
       begin
-        semester.courses << @course_scraper.extract(course_uri, semester)
-      rescue
+        @course_scraper.extract(course_uri, semester)
+      rescue StandardError => e
+        p e
       end
     end
     puts "Semester Scraped: #{semester.year} #{semester.semester}."

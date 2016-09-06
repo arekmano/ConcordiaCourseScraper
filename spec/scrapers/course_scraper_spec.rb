@@ -1,8 +1,7 @@
-require 'rspec'
 require 'open-uri'
 
-require_relative './spec_helper'
-require_relative '../lib/scrapers/course_scraper'
+require_relative '../spec_helper'
+require_relative '../../lib/scrapers/course_scraper'
 
 RSpec.describe CourseScraper do
 

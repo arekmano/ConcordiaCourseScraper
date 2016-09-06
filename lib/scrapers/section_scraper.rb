@@ -7,7 +7,7 @@ class SectionScraper < NokogiriScraper
     @sections = []
   end
 
-  def extract(section_data, course)
+  def extract(section_data, course, semester)
     section = Section.new(
       section_type: get_data(section_data[0]),
       code: get_data(section_data[1]) + get_data(section_data[2]),
@@ -16,8 +16,9 @@ class SectionScraper < NokogiriScraper
       time_end: extract_time(get_data(section_data[6])),
       room: get_data(section_data[7]),
       course: course,
-      semester: course.semester
+      semester: semester
     )
+    semester.sections << section
     @sections << section
     section
   end

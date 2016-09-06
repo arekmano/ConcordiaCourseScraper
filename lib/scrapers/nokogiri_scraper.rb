@@ -1,5 +1,6 @@
 require 'open-uri'
 require 'openssl'
+require 'nokogiri'
 
 class NokogiriScraper
   def get_data(noko_object)

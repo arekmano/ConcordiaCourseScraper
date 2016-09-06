@@ -1,5 +1,6 @@
-require_relative '../lib/models/course'
-require_relative '../lib/models/section'
+require_relative '../spec_helper'
+require_relative '../../lib/models/course'
+require_relative '../../lib/models/section'
 
 RSpec.describe Course do
   describe 'adds sections correctly' do
