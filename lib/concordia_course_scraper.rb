@@ -1,41 +1,60 @@
-require_relative './scrapers/concordia_scraper'
-require_relative './scrapers/course_scraper'
-require_relative './scrapers/semester_scraper'
+require_relative './models/semester_list'
+require_relative './models/course_list'
+require_relative './scrapers/selenium_scraper'
+require_relative './scrapers/fcms_scraper'
 require_relative './database_populators/csv_populator'
 
 class ConcordiaCourseScraper
-  attr_accessor :uri, :course_scraper, :semester_scraper, :section_scraper, :concordia_scraper, :database_populator
-  DEFAULT_SITE = URI.parse('https://aits.encs.concordia.ca/oldsite/resources/schedules/courses/')
-
-  def initialize(options = { uri: DEFAULT_SITE })
-    @uri = if options[:uri].class == String
-             URI.parse(options[:uri])
-           else
-             options[:uri]
-           end
+  attr_accessor :fcms_scraper, :selenium_scraper, :database_populator
+  COURSE_LEVELS = %w(200 300 400 500 600 700 800)
+  # COURSE_CODES = File.open('./course_codes_short.txt').readlines.map(&:chomp)
+  def initialize(options = {})
+    @course_list = CourseList.new
+    @semester_list = SemesterList.new
+    @section_list = []
+    @selenium_scraper = SeleniumScraper.new
+    @fcms_scraper = FcmsScraper.new(
+      course_list: @course_list,
+      semester_list: @semester_list,
+      section_list: @section_list
+    )
     @database_populator = options.fetch(:database_populator, CsvPopulator.new)
-    @section_scraper = options.fetch(:section_scraper, SectionScraper.new)
-    @course_scraper = options.fetch(:course_scraper, CourseScraper.new(section_scraper: @section_scraper))
-    @semester_scraper = options.fetch(:semester_scraper, SemesterScraper.new(course_scraper: @course_scraper))
-    @concordia_scraper = options.fetch(:concordia_scraper, ConcordiaScraper.new(semester_scraper: @semester_scraper))
   end
 
-  def extract_all(options = {})
-    @uri = options.fetch(:uri, @uri)
-    @cache = @concordia_scraper.extract(@uri) if @cache.nil?
-    @cache
+  def extract_all
+    @selenium_scraper.start
+    COURSE_LEVELS.each do |course_level|
+      COURSE_CODES.each do |course_code|
+        begin
+          @fcms_scraper.extract(@selenium_scraper.get_results(course_code, course_level))
+        rescue
+          puts "#{course_code} #{course_level} category has no classes"
+        end
+      end
+    end
+    @selenium_scraper.end
+  end
+
+  def extract(course_code, course_level)
+    @selenium_scraper.start
+    begin
+      @fcms_scraper.extract(@selenium_scraper.get_results(course_code, course_level))
+    rescue Exception => e
+      puts e.backtrace
+    end
+    @selenium_scraper.end
   end
 
   def courses
-    @course_scraper.course_list.courses
+    @course_list.courses
   end
 
   def semesters
-    @semester_scraper.semesters
+    @semester_list.semesters
   end
 
   def sections
-    @section_scraper.sections
+    @section_list
   end
 
   def save
@@ -43,3 +62,5 @@ class ConcordiaCourseScraper
     database_populator.save(courses, semesters, sections)
   end
 end
+
+ConcordiaCourseScraper.new.extract('ELEC', 400)

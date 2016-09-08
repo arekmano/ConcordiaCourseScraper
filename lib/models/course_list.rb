@@ -12,8 +12,6 @@ class CourseList
     if course.nil?
       course = Course.new(name: name, code: code)
       @courses << course
-    else
-      puts 'Old Course, reusing'
     end
     course
   end
