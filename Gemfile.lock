@@ -1,10 +1,13 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    childprocess (0.5.9)
+      ffi (~> 1.0, >= 1.0.11)
     codeclimate-test-reporter (0.6.0)
       simplecov (>= 0.7.1, < 1.0.0)
     diff-lcs (1.2.5)
     docile (1.1.5)
+    ffi (1.9.14)
     json (2.0.2)
     mini_portile2 (2.1.0)
     nokogiri (1.6.8-x86-mingw32)
@@ -24,11 +27,17 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.5.0)
     rspec-support (3.5.0)
+    rubyzip (1.1.7)
+    selenium-webdriver (2.53.4)
+      childprocess (~> 0.5)
+      rubyzip (~> 1.0)
+      websocket (~> 1.0)
     simplecov (0.12.0)
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.0)
+    websocket (1.2.3)
 
 PLATFORMS
   x86-mingw32
@@ -37,6 +46,7 @@ DEPENDENCIES
   codeclimate-test-reporter
   nokogiri (= 1.6.8)
   rspec
+  selenium-webdriver
   simplecov
 
 BUNDLED WITH
