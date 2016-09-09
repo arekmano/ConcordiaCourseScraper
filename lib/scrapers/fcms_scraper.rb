@@ -39,9 +39,10 @@ class FcmsScraper
   end
 
   def parse_sections(table, course)
-        p table
-    (table.size / 16).times do |i|
+    i = 0
+    while table.size / 16 > i
       begin
+        remove_duplicates(table, i)
         semester = parse_semester(table[(i * 16) + 15])
         section = Section.new(
           code: table[(i * 16) + 9].split('-')[0],
@@ -59,10 +60,23 @@ class FcmsScraper
       rescue
         puts "Issue Encountered when Scraping #{course.code}"
       end
+      i += 1
     end
   end
 
+  def remove_duplicates(table, i)
+    duplicates = 0
+    while table[(i * 16) + 11] == table[(i * 16) + 12]
+      duplicates += 1
+      table.delete_at((i * 16) + 12)
+    end
+    table.slice!((i * 16) + 13, duplicates)
+    table.slice!((i * 16) + 14, duplicates)
+    table.slice!((i * 16) + 15, duplicates)
+  end
+
   def parse_time(text)
+    return Time.new(0) if text =~ /TBA/ || text.nil?
     initial = Time.new(0)
     minutes = text.split(':')[1].slice(0..-3).to_i
     hours = text.split(':')[0].to_i
@@ -83,6 +97,6 @@ class FcmsScraper
     sections_table = doc.children[1].css('#ACE_\$ICField48\$' + offset.to_s).text.split(/\n/)
     sections_table.map! { |e| e.gsub(/\r/, '') }
     sections_table.delete('')
-    sections_table.delete_if { |e| e.match(/Notes:.*/) }
+    sections_table.delete_if { |e| e.match(/(Notes:.*|Topic:.*)/) }
   end
 end

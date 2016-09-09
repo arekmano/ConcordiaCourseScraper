@@ -8,8 +8,12 @@ GEM
     diff-lcs (1.2.5)
     docile (1.1.5)
     ffi (1.9.14)
+    ffi (1.9.14-x86-mingw32)
     json (2.0.2)
     mini_portile2 (2.1.0)
+    nokogiri (1.6.8)
+      mini_portile2 (~> 2.1.0)
+      pkg-config (~> 1.1.7)
     nokogiri (1.6.8-x86-mingw32)
       mini_portile2 (~> 2.1.0)
       pkg-config (~> 1.1.7)
@@ -40,6 +44,7 @@ GEM
     websocket (1.2.3)
 
 PLATFORMS
+  ruby
   x86-mingw32
 
 DEPENDENCIES

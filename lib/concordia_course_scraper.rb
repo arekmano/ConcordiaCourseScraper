@@ -58,9 +58,6 @@ class ConcordiaCourseScraper
   end
 
   def save
-    extract_all
     database_populator.save(courses, semesters, sections)
   end
 end
-
-ConcordiaCourseScraper.new.extract('ELEC', 400)
