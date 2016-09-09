@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS `courses` (
   `uuid` varchar(50) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `code` varchar(50) DEFAULT NULL,
+  `number` smallint(6) DEFAULT NULL,
   KEY `Index 1` (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
