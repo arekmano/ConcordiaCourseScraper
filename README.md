@@ -22,16 +22,29 @@ Add the following to the ruby script:
 require "concordia_course_scraper"
 ```
 
-Extract data to ruby objects:
+Extract all data to ruby objects:
 ```ruby
 scraper = ConcordiaCourseScraper.new
-data = scraper.extract_all
+scraper.extract_all
+courses = scraper.courses
+sections = scraper.sections
+semesters = scraper.semesters
+```
+
+Extract specific course level data:
+```ruby
+scraper = ConcordiaCourseScraper.new
+scraper.extract('ELEC', 400)
+courses = scraper.courses
+sections = scraper.sections
+semesters = scraper.semesters
 ```
 
 Save extracted data to CSV files:
 (Will save to 'courses.csv', 'sections.csv', 'semesters.csv' in the current directory by default)
 ```ruby
 scraper = ConcordiaCourseScraper.new
+scaper.extract_all
 scraper.save
 ```
 
