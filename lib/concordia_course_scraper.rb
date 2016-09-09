@@ -28,14 +28,14 @@ class ConcordiaCourseScraper
     @selenium_scraper.start
     @course_codes.each do |course_code|
       begin
-        @fcms_scraper.extract(@selenium_scraper.get_results(course_code, '2162'))
+        @fcms_scraper.extract(@selenium_scraper.get_results(course_code, '216'))
       rescue
-        puts "#{course_code} has no classes in Fall 2016"
-      end
-      begin
-        @fcms_scraper.extract(@selenium_scraper.get_results(course_code, '2164'))
-      rescue
-        puts "#{course_code} has no classes in Winter 2016"
+        begin
+          @fcms_scraper.extract(@selenium_scraper.get_results(course_code, '2162'))
+          @fcms_scraper.extract(@selenium_scraper.get_results(course_code, '2164'))
+        rescue
+          puts "#{course_code} has no classes in 2016"
+        end
       end
     end
     @selenium_scraper.end
@@ -44,7 +44,7 @@ class ConcordiaCourseScraper
   def extract(course_code)
     @selenium_scraper.start
     begin
-      @fcms_scraper.extract(@selenium_scraper.get_results(course_code, '2162'))
+      @fcms_scraper.extract(@selenium_scraper.get_results(course_code, '216'))
     rescue Exception => e
       puts e.backtrace
     end

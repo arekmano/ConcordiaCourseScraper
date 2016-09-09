@@ -10,17 +10,17 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping database structure for concordiacourses
-CREATE DATABASE IF NOT EXISTS `concordiacourses` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `concordiacourses`;
+-- Dumping database structure for x27xkp7knc6djk7e
+CREATE DATABASE IF NOT EXISTS `x27xkp7knc6djk7e` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `x27xkp7knc6djk7e`;
 
 
 -- Dumping structure for table concordiacourses.courses
 CREATE TABLE IF NOT EXISTS `courses` (
   `uuid` varchar(50) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
-  `code` varchar(50) DEFAULT NULL,
-  `number` smallint(6) DEFAULT NULL,
+  `code` varchar(8) DEFAULT NULL,
+  `number` varchar(8) DEFAULT NULL,
   KEY `Index 1` (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

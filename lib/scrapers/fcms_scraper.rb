@@ -1,5 +1,4 @@
 require 'nokogiri'
-require 'byebug'
 require_relative '../models/course'
 require_relative '../models/semester'
 require_relative '../models/course_list'
@@ -41,14 +40,19 @@ class FcmsScraper
   end
 
   def parse_section_type(section_text)
-    section_text.match(/(LEC|TUT|LAB|STU|SEM|PRA|REG|TL)/)[0]
+    match = section_text.match(/(LEC|TUT|LAB|STU|SEM|PRA|REG|TL|CON|WKS|THE|RSC)/)
+    if match.nil?
+      puts "Section type unrecognized for #{section_text}"
+      return nil
+    end
+    match[0]
   end
 
   def parse_sections(table, course)
     split_sections(table).each do |values|
       begin
         remove_duplicates(values)
-        semester = parse_semester(values[15])
+        semester = parse_semester(values[-1])
         section = Section.new(
           code: values[9].split('-')[0],
           days: values[11].split(' ')[0],
