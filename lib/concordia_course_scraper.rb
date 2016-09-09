@@ -29,7 +29,6 @@ class ConcordiaCourseScraper
     @course_codes.each do |course_code|
       begin
         @fcms_scraper.extract(@selenium_scraper.get_results(course_code, '2162'))
-        @fcms_scraper.extract(@selenium_scraper.get_results(course_code, '2164'))
       rescue
         puts "#{course_code} has no classes in Fall 2016"
       end

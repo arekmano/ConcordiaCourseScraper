@@ -41,7 +41,7 @@ class FcmsScraper
   end
 
   def parse_section_type(section_text)
-    section_text.match(/(LEC|TUT|LAB|STU|SEM|PRA)/)[0]
+    section_text.match(/(LEC|TUT|LAB|STU|SEM|PRA|REG|TL)/)[0]
   end
 
   def parse_sections(table, course)
