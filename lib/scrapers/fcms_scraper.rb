@@ -20,6 +20,7 @@ class FcmsScraper
       course_text = title.text.gsub(/(^[[:space:]]|[[:space:]]$)/, '').split(' - ')
       course = @course_list.get(
         course_code(course_text),
+        course_number(course_text),
         course_name(course_text)
       )
       parse_sections(sections_table(doc, offset), course)
@@ -27,7 +28,11 @@ class FcmsScraper
   end
 
   def course_code(course_text)
-    course_text[0].gsub(' ', '')
+    course_text[0].split(' ')[0]
+  end
+
+  def course_number(course_text)
+    course_text[0].split(' ')[1]
   end
 
   def course_name(course_text)

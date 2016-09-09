@@ -20,7 +20,8 @@ class CsvPopulator
         csv << [
           course.id,
           course.name,
-          course.code
+          course.code,
+          course.number
         ]
       end
     end

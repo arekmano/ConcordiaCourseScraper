@@ -7,10 +7,14 @@ class CourseList
     @courses = options.fetch(:courses, [])
   end
 
-  def get(code, name)
-    course = @courses.find { |e| e.name == name && e.code == code }
+  def get(code, number, name)
+    course = @courses.find { |e| e.name == name && e.code == code && e.number == number}
     if course.nil?
-      course = Course.new(name: name, code: code)
+      course = Course.new(
+        name: name,
+        code: code,
+        number: number
+      )
       @courses << course
     end
     course
