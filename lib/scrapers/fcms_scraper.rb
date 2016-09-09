@@ -1,5 +1,5 @@
 require 'nokogiri'
-
+require 'byebug'
 require_relative '../models/course'
 require_relative '../models/semester'
 require_relative '../models/course_list'
@@ -23,6 +23,7 @@ class FcmsScraper
         course_number(course_text),
         course_name(course_text)
       )
+      puts "Extracting #{course.code} #{course.number}"
       parse_sections(sections_table(doc, offset), course)
     end
   end
@@ -40,22 +41,21 @@ class FcmsScraper
   end
 
   def parse_section_type(section_text)
-    section_text.match(/(LEC|TUT|LAB|STU)/)[0]
+    section_text.match(/(LEC|TUT|LAB|STU|SEM|PRA)/)[0]
   end
 
   def parse_sections(table, course)
-    i = 0
-    while table.size / 16 > i
+    split_sections(table).each do |values|
       begin
-        remove_duplicates(table, i)
-        semester = parse_semester(table[(i * 16) + 15])
+        remove_duplicates(values)
+        semester = parse_semester(values[15])
         section = Section.new(
-          code: table[(i * 16) + 9].split('-')[0],
-          days: table[(i * 16) + 11].split(' ')[0],
-          time_start: parse_time(table[(i * 16) + 11].split(' ')[1]),
-          time_end: parse_time(table[(i * 16) + 11].split(' ')[3]),
-          room: table[(i * 16) + 12],
-          section_type: parse_section_type(table[(i * 16) + 9]),
+          code: values[9].split('-')[0],
+          days: values[11].split(' ')[0],
+          time_start: parse_time(values[11].split(' ')[1]),
+          time_end: parse_time(values[11].split(' ')[3]),
+          room: values[12],
+          section_type: parse_section_type(values[9]),
           semester: semester,
           course: course
         )
@@ -63,27 +63,27 @@ class FcmsScraper
         semester.sections << section
         @section_list << section
       rescue
-        puts "Issue Encountered when Scraping #{course.code}"
+        puts "Issue Encountered when Scraping #{course.code} #{course.number}"
       end
-      i += 1
     end
   end
 
-  def remove_duplicates(table, i)
-    duplicates = 0
-    while table[(i * 16) + 11] == table[(i * 16) + 12]
-      duplicates += 1
-      table.delete_at((i * 16) + 12)
-    end
-    table.slice!((i * 16) + 13, duplicates)
-    table.slice!((i * 16) + 14, duplicates)
-    table.slice!((i * 16) + 15, duplicates)
+  def split_sections(table)
+    table.slice_before('Class')
+  end
+
+  def remove_duplicates(table)
+    duplicates = (table.size - 16) / 4
+    table.slice!(12, duplicates)
+    table.slice!(13, duplicates)
+    table.slice!(14, duplicates)
+    table.slice!(15, duplicates)
   end
 
   def parse_time(text)
     return Time.new(0) if text =~ /TBA/ || text.nil?
     initial = Time.new(0)
-    minutes = text.split(':')[1].slice(0..-3).to_i
+    minutes = text.split(':')[1].to_i
     hours = text.split(':')[0].to_i
     hours + 12 if text =~ /PM/
 

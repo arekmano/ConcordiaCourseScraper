@@ -6,8 +6,6 @@ require_relative './database_populators/csv_populator'
 
 class ConcordiaCourseScraper
   attr_accessor :fcms_scraper, :selenium_scraper, :database_populator
-  COURSE_LEVELS = %w(200 300 400 500 600 700 800)
-  # COURSE_CODES = File.open('./course_codes_short.txt').readlines.map(&:chomp)
   def initialize(options = {})
     @course_list = CourseList.new
     @semester_list = SemesterList.new
@@ -19,26 +17,35 @@ class ConcordiaCourseScraper
       section_list: @section_list
     )
     @database_populator = options.fetch(:database_populator, CsvPopulator.new)
+    if options[:course_codes] == 'ALL'
+      @course_codes = File.open('./course_codes.txt').readlines.map(&:chomp)
+    else
+      @course_codes = File.open('./course_codes_short.txt').readlines.map(&:chomp)
+    end
   end
 
   def extract_all
     @selenium_scraper.start
-    COURSE_LEVELS.each do |course_level|
-      COURSE_CODES.each do |course_code|
-        begin
-          @fcms_scraper.extract(@selenium_scraper.get_results(course_code, course_level))
-        rescue
-          puts "#{course_code} #{course_level} category has no classes"
-        end
+    @course_codes.each do |course_code|
+      begin
+        @fcms_scraper.extract(@selenium_scraper.get_results(course_code, '2162'))
+        @fcms_scraper.extract(@selenium_scraper.get_results(course_code, '2164'))
+      rescue
+        puts "#{course_code} has no classes in Fall 2016"
+      end
+      begin
+        @fcms_scraper.extract(@selenium_scraper.get_results(course_code, '2164'))
+      rescue
+        puts "#{course_code} has no classes in Winter 2016"
       end
     end
     @selenium_scraper.end
   end
 
-  def extract(course_code, course_level)
+  def extract(course_code)
     @selenium_scraper.start
     begin
-      @fcms_scraper.extract(@selenium_scraper.get_results(course_code, course_level))
+      @fcms_scraper.extract(@selenium_scraper.get_results(course_code, '2162'))
     rescue Exception => e
       puts e.backtrace
     end
