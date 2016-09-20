@@ -89,7 +89,7 @@ class FcmsScraper
     initial = Time.new(0)
     minutes = text.split(':')[1].to_i
     hours = text.split(':')[0].to_i
-    hours + 12 if text =~ /PM/
+    hours += 12 if text =~ /PM/
 
     Time.new(initial.year, initial.month, initial.day, hours, minutes)
   end
