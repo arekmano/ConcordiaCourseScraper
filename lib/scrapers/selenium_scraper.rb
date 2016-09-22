@@ -4,7 +4,7 @@ require_relative './fcms_scraper'
 
 class SeleniumScraper
   def start
-    @driver = Selenium::WebDriver.for :chrome
+    @driver = Selenium::WebDriver.for :remote, url: 'http://localhost:8001'
   end
 
   def end
