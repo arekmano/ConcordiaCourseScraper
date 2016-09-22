@@ -35,6 +35,7 @@ class SqlPopulator
         INSERT INTO courses (uuid, name, code, number)
         VALUES('#{@client.escape(course.id)}', '#{@client.escape(course.name)}', '#{@client.escape(course.code)}', '#{@client.escape(course.number)}')"
       puts "Saved Course #{course.code} #{course.number}"
+      sleep 0.2
     end
   end
 
@@ -44,6 +45,7 @@ class SqlPopulator
         INSERT INTO semesters (uuid, semester, year)
         VALUES('#{@client.escape(semester.id)}', '#{@client.escape(semester.semester)}', '#{semester.year}')"
       puts "Saved Semester #{semester.semester} #{semester.year}"
+      sleep 0.2
     end
   end
 
@@ -73,6 +75,7 @@ class SqlPopulator
           '#{@client.escape(section.course.id.to_s)}'
         )"
       puts "Saved Section #{section.code}"
+      sleep 0.2
     end
   end
 end
