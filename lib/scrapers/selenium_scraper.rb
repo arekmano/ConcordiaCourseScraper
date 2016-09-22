@@ -4,7 +4,7 @@ require_relative './fcms_scraper'
 
 class SeleniumScraper
   def start
-    @driver = Selenium::WebDriver.for :remote, url: 'http://localhost:8001'
+    @driver = Selenium::WebDriver.for :remote, url: ENV['PHANTOM_JS_URL']
   end
 
   def end
