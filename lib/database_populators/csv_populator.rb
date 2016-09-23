@@ -17,12 +17,7 @@ class CsvPopulator
   def save_courses(courses)
     CSV.open(@course_file, 'w') do |csv|
       courses.each do |course|
-        csv << [
-          course.id,
-          course.name,
-          course.code,
-          course.number
-        ]
+        csv << course_data(course)
       end
     end
   end
@@ -30,11 +25,7 @@ class CsvPopulator
   def save_semesters(semesters)
     CSV.open(@semester_file, 'w') do |csv|
       semesters.each do |semester|
-        csv << [
-          semester.id,
-          semester.semester,
-          semester.year
-        ]
+        csv << semester_data(semester)
       end
     end
   end
@@ -42,18 +33,39 @@ class CsvPopulator
   def save_sections(sections)
     CSV.open(@section_file, 'w') do |csv|
       sections.each do |section|
-        csv << [
-          section.id,
-          section.code,
-          section.days,
-          section.time_start.strftime('%Y-%m-%d %H:%M:%S'),
-          section.time_end.strftime('%Y-%m-%d %H:%M:%S'),
-          section.room,
-          section.section_type,
-          section.semester.id,
-          section.course.id
-        ]
+        csv << section_data(section)
       end
     end
+  end
+
+  def semester_data(semester)
+    [
+      semester.id,
+      semester.semester,
+      semester.year
+    ]
+  end
+
+  def section_data(section)
+    [
+      section.id,
+      section.code,
+      section.days,
+      section.time_start.strftime('%Y-%m-%d %H:%M:%S'),
+      section.time_end.strftime('%Y-%m-%d %H:%M:%S'),
+      section.room,
+      section.section_type,
+      section.semester.id,
+      section.course.id
+    ]
+  end
+
+  def course_data(course)
+    [
+      course.id,
+      course.name,
+      course.code,
+      course.number
+    ]
   end
 end
