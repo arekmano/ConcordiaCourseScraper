@@ -1,5 +1,5 @@
 require 'selenium-webdriver'
-
+require 'byebug'
 require_relative './fcms_scraper'
 
 class SeleniumScraper
@@ -41,7 +41,9 @@ class SeleniumScraper
   end
 
   def fill_course(course_code)
-    @driver.find_element(:name, 'SSR_CLSRCH_WRK_SUBJECT$1').send_keys course_code
+    code_box = @driver.find_element(:name, 'SSR_CLSRCH_WRK_SUBJECT$1')
+    @driver.find_element(:name, 'SSR_CLSRCH_WRK_SUBJECT$1').click
+    @driver.execute_script("arguments[0].setAttribute('value', arguments[1])", code_box, course_code)
     @driver.find_element(:name, 'SSR_CLSRCH_WRK_CU_CRSE_LVL_200$3').click
     @driver.find_element(:name, 'SSR_CLSRCH_WRK_CU_CRSE_LVL_300$3').click
     @driver.find_element(:name, 'SSR_CLSRCH_WRK_CU_CRSE_LVL_400$3').click
@@ -54,6 +56,11 @@ class SeleniumScraper
   def select_term(term_number)
     dropdown = @driver.find_element(:name, 'CLASS_SRCH_WRK2_STRM$35$')
     option = Selenium::WebDriver::Support::Select.new(dropdown)
+    @driver.execute_script("arguments[0].setAttribute('value', arguments[1])", option.options[1] , term_number)
+    wait = Selenium::WebDriver::Wait.new(timeout: 5)
+    wait.until {
+      option.options[1].attribute('value') == term_number.to_s
+    }
     option.select_by(:value, term_number)
   end
 end

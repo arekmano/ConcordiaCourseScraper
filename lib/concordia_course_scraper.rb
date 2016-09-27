@@ -24,27 +24,27 @@ class ConcordiaCourseScraper
     end
   end
 
-  def extract_all
+  def extract_all(year_code = 216)
     @selenium_scraper.start
     @course_codes.each do |course_code|
       begin
-        @fcms_scraper.extract(@selenium_scraper.get_results(course_code, '216'))
+        @fcms_scraper.extract(@selenium_scraper.get_results(course_code, year_code))
       rescue
         begin
-          @fcms_scraper.extract(@selenium_scraper.get_results(course_code, '2162'))
-          @fcms_scraper.extract(@selenium_scraper.get_results(course_code, '2164'))
+          @fcms_scraper.extract(@selenium_scraper.get_results(course_code, "#{year_code}2"))
+          @fcms_scraper.extract(@selenium_scraper.get_results(course_code, "#{year_code}4"))
         rescue
-          puts "#{course_code} has no classes in 2016"
+          puts "#{course_code} has no classes in #{year_code}"
         end
       end
     end
     @selenium_scraper.end
   end
 
-  def extract(course_code)
+  def extract(course_code, year_code = 216)
     @selenium_scraper.start
     begin
-      @fcms_scraper.extract(@selenium_scraper.get_results(course_code, '216'))
+      @fcms_scraper.extract(@selenium_scraper.get_results(course_code, year_code))
     rescue Exception => e
       puts e.backtrace
     end
