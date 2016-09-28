@@ -5,6 +5,7 @@ require_relative './fcms_scraper'
 class SeleniumScraper
   def start
     @driver = Selenium::WebDriver.for :chrome
+    @driver.navigate.to 'https://campus.concordia.ca/psc/pscsprd/EMPLOYEE/HRMS/c/CU_EXT.CU_CLASS_SEARCH.GBL'
   end
 
   def end
@@ -12,8 +13,7 @@ class SeleniumScraper
   end
 
   def get_results(course_code, term)
-    @driver.navigate.to 'https://campus.concordia.ca/psc/pscsprd/EMPLOYEE/HRMS/c/CU_EXT.CU_CLASS_SEARCH.GBL'
-
+    @driver.navigate.refresh
     select_term(term)
     fill_course(course_code)
     sleep 1
@@ -54,13 +54,22 @@ class SeleniumScraper
   end
 
   def select_term(term_number)
-    dropdown = @driver.find_element(:name, 'CLASS_SRCH_WRK2_STRM$35$')
-    option = Selenium::WebDriver::Support::Select.new(dropdown)
-    @driver.execute_script("arguments[0].setAttribute('value', arguments[1])", option.options[1] , term_number)
-    wait = Selenium::WebDriver::Wait.new(timeout: 5)
-    wait.until {
-      option.options[1].attribute('value') == term_number.to_s
-    }
-    option.select_by(:value, term_number)
+    unless term_number.to_s =~ /216/
+      @driver.execute_script(
+        "arguments[0].setAttribute('value', arguments[1])",
+        dropdown.options[1],
+        term_number.to_s
+      )
+      wait = Selenium::WebDriver::Wait.new(timeout: 5)
+      wait.until {
+        dropdown.options[1].attribute('value') == term_number.to_s
+      }
+    end
+    dropdown.select_by(:value, term_number.to_s)
+  end
+
+  def dropdown
+    dropdown_node = @driver.find_element(:name, 'CLASS_SRCH_WRK2_STRM$35$')
+    Selenium::WebDriver::Support::Select.new(dropdown_node)
   end
 end
