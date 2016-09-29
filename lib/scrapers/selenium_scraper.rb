@@ -1,5 +1,4 @@
 require 'selenium-webdriver'
-require 'byebug'
 require_relative './fcms_scraper'
 
 class SeleniumScraper

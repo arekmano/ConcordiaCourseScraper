@@ -1,7 +1,6 @@
 require 'capybara/poltergeist'
 require 'capybara'
 require 'capybara/dsl'
-require 'byebug'
 
 Capybara.run_server = false
 Capybara.current_driver = :poltergeist
