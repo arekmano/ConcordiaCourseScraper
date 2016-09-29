@@ -71,8 +71,8 @@ class SqlPopulator
           '#{@client.escape(section.time_end.strftime('%Y-%m-%d %H:%M:%S').to_s)}',
           '#{@client.escape(section.room.to_s)}',
           '#{@client.escape(section.section_type.to_s)}',
-          '#{@client.escape(section.semester.id.to_s)}',
-          '#{@client.escape(section.course.id.to_s)}'
+          '#{@client.escape(section.semester.to_s)}',
+          '#{@client.escape(section.course.to_s)}'
         )"
       puts "Saved Section #{section.code}"
       sleep 0.2

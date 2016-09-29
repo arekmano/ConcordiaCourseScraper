@@ -60,11 +60,11 @@ class FcmsScraper
           time_end: parse_time(values[11].split(' ')[3]),
           room: values[12],
           section_type: parse_section_type(values[9]),
-          semester: semester,
-          course: course
+          semester: semester.id,
+          course: course.id
         )
-        course.sections << section
-        semester.sections << section
+        course.sections << section.id
+        semester.sections << section.id
         @section_list << section
       rescue
         puts "Issue Encountered when Scraping #{course.code} #{course.number}"

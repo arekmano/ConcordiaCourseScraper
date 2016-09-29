@@ -8,7 +8,7 @@ class CourseList
   end
 
   def get(code, number, name)
-    course = @courses.find { |e| e.name == name && e.code == code && e.number == number}
+    course = @courses.find { |e| e.code == code && e.number == number}
     if course.nil?
       course = Course.new(
         name: name,

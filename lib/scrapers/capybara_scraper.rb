@@ -20,8 +20,8 @@ class CapybaraScraper
   def submit
     click_on 'Search'
     sleep 1
-    raise 'Too many Classes' if page.text =~ /maximum limit of 300 sections/
-    raise 'No match for code' if page.text =~ /no results that match the criteria specified/
+    raise TooManyClassesError.new('Too many Classes') if page.text =~ /maximum limit of 300 sections/
+    raise NoMatchError.new('No match for code') if page.text =~ /no results that match the criteria specified/
     click_on 'OK' if page.text =~ /over 100 classes/
     find('#CLASS_SRCH_WRK2_SSR_PB_MODIFY')
   end
@@ -43,4 +43,10 @@ class CapybaraScraper
     check 'SSR_CLSRCH_WRK_CU_CRSE_LVL_800$3'
     fill_in 'SSR_CLSRCH_WRK_SUBJECT$1', with: course_code
   end
+end
+
+class TooManyClassesError < StandardError
+end
+
+class NoMatchError < StandardError
 end

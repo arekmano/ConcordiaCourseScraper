@@ -29,13 +29,15 @@ class ConcordiaCourseScraper
       begin
         html = @scraper.get_results(course_code, year_code.to_s)
         @fcms_scraper.extract(html)
-      rescue
+      rescue TooManyClassesError
         begin
           @fcms_scraper.extract(@scraper.get_results(course_code, "#{year_code}2"))
           @fcms_scraper.extract(@scraper.get_results(course_code, "#{year_code}4"))
-        rescue
+        rescue NoMatchError
           puts "#{course_code} has no classes in #{year_code}"
         end
+      rescue NoMatchError
+        puts "#{course_code} has no classes in #{year_code}"
       end
     end
   end
@@ -43,6 +45,9 @@ class ConcordiaCourseScraper
   def extract(course_code, year_code = 216)
     begin
       @fcms_scraper.extract(@scraper.get_results(course_code, year_code))
+    rescue TooManyClassesError
+      @fcms_scraper.extract(@scraper.get_results(course_code, "#{year_code}2"))
+      @fcms_scraper.extract(@scraper.get_results(course_code, "#{year_code}4"))
     rescue Exception => e
       puts e.backtrace
     end

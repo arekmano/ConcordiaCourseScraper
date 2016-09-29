@@ -55,8 +55,8 @@ class CsvPopulator
       section.time_end.strftime('%Y-%m-%d %H:%M:%S'),
       section.room,
       section.section_type,
-      section.semester.id,
-      section.course.id
+      section.semester,
+      section.course
     ]
   end
 
