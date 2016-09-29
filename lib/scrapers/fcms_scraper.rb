@@ -4,7 +4,7 @@ require_relative '../models/semester'
 require_relative '../models/course_list'
 require_relative '../models/semester_list'
 require_relative '../models/section'
-
+require 'byebug'
 class FcmsScraper
   attr_accessor :course_list, :semester_list, :section_list
   def initialize(options = {})
@@ -67,6 +67,7 @@ class FcmsScraper
         semester.sections << section
         @section_list << section
       rescue
+        byebug
         puts "Issue Encountered when Scraping #{course.code} #{course.number}"
       end
     end
@@ -89,7 +90,7 @@ class FcmsScraper
     initial = Time.new(0)
     minutes = text.split(':')[1].to_i
     hours = text.split(':')[0].to_i
-    hours += 12 if text =~ /PM/
+    hours = (hours + 12) % 24 if text =~ /PM/
 
     Time.new(initial.year, initial.month, initial.day, hours, minutes)
   end
