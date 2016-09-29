@@ -4,7 +4,7 @@ require_relative '../models/semester'
 require_relative '../models/course_list'
 require_relative '../models/semester_list'
 require_relative '../models/section'
-require 'byebug'
+
 class FcmsScraper
   attr_accessor :course_list, :semester_list, :section_list
   def initialize(options = {})
@@ -67,7 +67,6 @@ class FcmsScraper
         semester.sections << section
         @section_list << section
       rescue
-        byebug
         puts "Issue Encountered when Scraping #{course.code} #{course.number}"
       end
     end
