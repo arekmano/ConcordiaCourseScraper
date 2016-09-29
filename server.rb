@@ -2,6 +2,8 @@ require 'sinatra'
 require_relative './lib/concordia_course_scraper'
 require_relative './lib/database_populators/sql_populator'
 
+set :port, ENV['PORT']
+
 get '/' do
   populator = SqlPopulator.new(
     username: ENV['CONCORDIA_COURSE_USER'],
