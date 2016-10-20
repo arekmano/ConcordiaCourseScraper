@@ -8,8 +8,8 @@ populator = SqlPopulator.new(
   database: ENV['CONCORDIA_COURSE_DB']
 )
 scraper = ConcordiaCourseScraper.new(
-    course_codes: 'ALL',
-    database_populator: populator
+  course_codes: 'ALL',
+  database_populator: populator
 )
 scraper.extract_all(214)
 scraper.extract_all(215)

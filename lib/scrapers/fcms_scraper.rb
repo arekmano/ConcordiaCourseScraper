@@ -40,7 +40,7 @@ class FcmsScraper
   end
 
   def parse_section_type(section_text)
-    match = section_text.match(/(LEC|TUT|LAB|STU|SEM|PRA|REG|TL|CON|WKS|THE|RSC)/)
+    match = section_text.match(/(LEC|TUT|LAB|STU|SEM|PRA|REG|TL|CON|WKS|THE|RSC|FLD|REA)/)
     if match.nil?
       puts "Section type unrecognized for #{section_text}"
       return nil

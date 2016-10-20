@@ -35,9 +35,13 @@ class ConcordiaCourseScraper
           @fcms_scraper.extract(@scraper.get_results(course_code, "#{year_code}4"))
         rescue NoMatchError
           puts "#{course_code} has no classes in #{year_code}"
+        rescue StateError
+          puts "State Error when parsing #{course_code} in #{year_code}"
         end
       rescue NoMatchError
         puts "#{course_code} has no classes in #{year_code}"
+      rescue StateError
+        puts "State Error when parsing #{course_code} in #{year_code}"
       end
     end
   end

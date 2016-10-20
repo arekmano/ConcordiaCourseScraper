@@ -1,11 +1,11 @@
 require 'capybara/poltergeist'
 require 'capybara'
 require 'capybara/dsl'
-
+require 'byebug'
 Capybara.run_server = false
 Capybara.current_driver = :poltergeist
 Capybara.app_host = 'https://fcms.concordia.ca/'
-Capybara.default_max_wait_time = 5
+Capybara.default_max_wait_time = 20
 
 class CapybaraScraper
   include Capybara::DSL
@@ -19,11 +19,31 @@ class CapybaraScraper
 
   def submit
     click_on 'Search'
-    sleep 1
-    raise TooManyClassesError.new('Too many Classes') if page.text =~ /maximum limit of 300 sections/
-    raise NoMatchError.new('No match for code') if page.text =~ /no results that match the criteria specified/
-    click_on 'OK' if page.text =~ /over 100 classes/
-    find('#CLASS_SRCH_WRK2_SSR_PB_MODIFY')
+    page_state
+    begin
+      find('#CLASS_SRCH_WRK2_SSR_PB_MODIFY')
+    rescue
+      page.save_screenshot("errors/error_#{Time.now.to_f.to_s.gsub('.','')}.png")
+      raise StateError, 'Modify button not found.'
+    end
+  end
+
+  def page_state
+    start_time = Time.now
+    state_found = false
+    until state_found
+      raise TooManyClassesError, 'Too many Classes' if page.text =~ /maximum limit of 300 sections/
+      raise NoMatchError, 'No match for code' if page.text =~ /no results that match the criteria specified/
+      if page.text =~ /over 100 classes/
+        click_on 'OK'
+        state_found = true
+      elsif page.text =~ /Search Results/
+        state_found = true
+      elsif Time.now - start_time > 10
+        page.save_screenshot("errors/error_#{Time.now.to_f.to_s.gsub('.', '')}.png")
+        raise StateError, 'State Finding timeout.'
+      end
+    end
   end
 
   def select_term(term)
@@ -49,4 +69,7 @@ class TooManyClassesError < StandardError
 end
 
 class NoMatchError < StandardError
+end
+
+class StateError < StandardError
 end
