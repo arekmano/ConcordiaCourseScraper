@@ -1,5 +1,6 @@
 require_relative './base'
 require 'digest'
+
 class Course < Base
   attr_accessor :name, :code, :number, :sections
   def initialize(options = {})

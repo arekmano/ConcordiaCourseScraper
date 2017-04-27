@@ -67,7 +67,7 @@ class FcmsScraper
           days: values[11].split(' ')[0],
           time_start: parse_time(values[11].split(' ')[1]),
           time_end: parse_time(values[11].split(' ')[3]),
-          room: values[12],
+          room: parse_room(values[12]).id,
           section_type: parse_section_type(values[9]),
           semester: semester.id,
           course: course.id
@@ -110,6 +110,15 @@ class FcmsScraper
       text_array[1].to_i,
       text_array[0]
     )
+  end
+
+  def parse_room(text)
+    if text =~ /TBA/
+      @room_list.tba
+    else
+      split_text = text.split(' ')
+      @room_list.get(split_text[2], split_text[0], split_text[1])
+    end
   end
 
   def sections_table(doc, offset)
