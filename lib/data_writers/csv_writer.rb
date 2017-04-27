@@ -11,6 +11,9 @@ class CsvWriter
     @semester_file = options.fetch(:semester_file, 'semesters.csv')
   end
 
+  def clear_tables
+  end
+
   def save(courses, semesters, sections)
     save_courses(courses)
     save_semesters(semesters)
