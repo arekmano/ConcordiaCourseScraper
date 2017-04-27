@@ -5,14 +5,23 @@ require_relative '../models/course_list'
 require_relative '../models/semester_list'
 require_relative '../models/section'
 
+##
+# Scraper which crawls the fcms.concordia.ca/fcms/asc002_stud_all.aspx
+# web application to obtain course data
+##
 class FcmsScraper
   attr_accessor :course_list, :semester_list, :section_list
   def initialize(options = {})
     @course_list = options.fetch(:course_list, CourseList.new)
     @semester_list = options.fetch(:semester_list, SemesterList.new)
     @section_list = options.fetch(:section_list, [])
+    @data_writer = options[:data_writer]
   end
 
+  ##
+  # Extracts course, semester and course sections from a given
+  # web page showing course results
+  ##
   def extract(html)
     doc = Nokogiri::HTML(html)
     doc.children[1].css('.PAGROUPBOXLABELLEVEL1.PSLEFTCORNER').each_with_index do |title, offset|
@@ -66,6 +75,7 @@ class FcmsScraper
         course.sections << section.id
         semester.sections << section.id
         @section_list << section
+        @data_writer.save_section(section)
       rescue
         puts "Issue Encountered when Scraping #{course.code} #{course.number}"
       end

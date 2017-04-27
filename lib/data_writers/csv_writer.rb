@@ -1,6 +1,10 @@
 require 'csv'
 
-class CsvPopulator
+##
+# Writer used to write Concordia course information to 3
+# separate csv files
+##
+class CsvWriter
   def initialize(options = {})
     @course_file = options.fetch(:course_file, 'courses.csv')
     @section_file = options.fetch(:section_file, 'sections.csv')
@@ -35,6 +39,24 @@ class CsvPopulator
       sections.each do |section|
         csv << section_data(section)
       end
+    end
+  end
+
+  def save_course(course)
+    CSV.open(@course_file, 'a') do |csv|
+      csv << course_data(course)
+    end
+  end
+
+  def save_semester(semester)
+    CSV.open(@semester_file, 'a') do |csv|
+      csv << semester_data(semester)
+    end
+  end
+
+  def save_section(section)
+    CSV.open(@section_file, 'a') do |csv|
+      csv << section_data(section)
     end
   end
 

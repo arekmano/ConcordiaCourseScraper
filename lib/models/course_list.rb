@@ -5,6 +5,7 @@ class CourseList
 
   def initialize(options = {})
     @courses = options.fetch(:courses, [])
+    @data_writer = options[:data_writer]
   end
 
   def get(code, number, name)
@@ -16,6 +17,7 @@ class CourseList
         number: number
       )
       @courses << course
+      @data_writer.save_course(course)
     end
     course
   end

@@ -5,6 +5,7 @@ class SemesterList
 
   def initialize(options = {})
     @semesters = options.fetch(:semesters, [])
+    @data_writer = options[:data_writer]
   end
 
   def get(year, semester)
@@ -12,6 +13,7 @@ class SemesterList
     if semester_obj.nil?
       semester_obj = Semester.new(semester: semester, year: year)
       @semesters << semester_obj
+      @data_writer.save_semester(semester_obj)
     end
     semester_obj
   end
