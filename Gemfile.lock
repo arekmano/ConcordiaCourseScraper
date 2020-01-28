@@ -23,16 +23,13 @@ GEM
     mime-types (3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
-    mini_portile2 (2.1.0)
+    mini_portile2 (2.4.0)
     mysql2 (0.4.4)
     mysql2 (0.4.4-x86-mingw32)
-    nokogiri (1.6.8)
-      mini_portile2 (~> 2.1.0)
-      pkg-config (~> 1.1.7)
-    nokogiri (1.6.8-x86-mingw32)
-      mini_portile2 (~> 2.1.0)
-      pkg-config (~> 1.1.7)
-    pkg-config (1.1.7)
+    nokogiri (1.10.4)
+      mini_portile2 (~> 2.4.0)
+    nokogiri (1.10.4-x86-mingw32)
+      mini_portile2 (~> 2.4.0)
     poltergeist (1.10.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
@@ -80,7 +77,7 @@ DEPENDENCIES
   capybara
   codeclimate-test-reporter
   mysql2
-  nokogiri (= 1.6.8)
+  nokogiri (= 1.10.4)
   poltergeist
   rspec
   selenium-webdriver
